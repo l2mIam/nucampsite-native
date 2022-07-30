@@ -1,8 +1,10 @@
 import { Button, FlatList, Modal, StyleSheet, Text, View } from 'react-native';
+import { Input, Rating } from 'react-native-elements';
 import { useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import RenderCampsite from './RenderCampsite'
 import { toggleFavorite } from '../features/favorites/favoritesSlice';
+import { postComment } from '../features/comments/commentsSlice';
 
 const CampsiteInfoScreen = ({ route }) => {
   /* destructure to get campsite param from route params object
@@ -10,13 +12,40 @@ const CampsiteInfoScreen = ({ route }) => {
   const { campsite } = route.params
   const comments = useSelector((state) => state.comments)
   const favorites = useSelector((state) => state.favorites)
-  const dispatch = useDispatch()
   const [showModal, setShowModal] = useState(false)
+  const [rating, setRating] = useState(5)
+  const [author, setAuthor] = useState('')
+  const [text, setText] = useState('')
+  const dispatch = useDispatch()
+
+  const handleSubmit = () => {
+    const newComment = {
+      author,
+      rating,
+      text,
+      campsiteId: campsite.id
+    }
+    dispatch(postComment(newComment))
+    setShowModal(!showModal)
+  }
+
+  const resetForm = () => {
+    setRating(5)
+    setAuthor('')
+    setText('')
+  }
 
   const renderCommentItem = ({ item }) => {
     return (
       <View style={styles.commentItem}>
+        {/* outer { this is javascript} inner { object literal (inline style)} */}
         <Text style={{ fontSize: 14 }}>{item.text}</Text>
+        <Rating
+          startingValue={item.rating}
+          imageSize={10}
+          style={{ alignItems: 'flex-start', paddingVertical: '5%' }}
+          readonly
+        ></Rating>
         <Text style={{ fontSize: 12 }}>{item.rating}</Text>
         <Text style={{ fontSize: 12 }}>
           {`-- ${item.author}, ${item.date}`}
@@ -24,6 +53,7 @@ const CampsiteInfoScreen = ({ route }) => {
       </View>
     )
   }
+
   return (
     <>
       <FlatList
@@ -56,22 +86,42 @@ const CampsiteInfoScreen = ({ route }) => {
         onRequestClose={() => setShowModal(!showModal)}
       >
         <View style={styles.modal}>
-          {/* <Text style={styles.modalTitle}>
-            Search Campsite Reservations
-          </Text>
-          <Text style={styles.modalText}>
-            Number of Campers: {campers}
-          </Text>
-          <Text style={styles.modalText}>
-            Hike-In?: {hikeIn ? 'Yes' : 'No'}
-          </Text>
-          <Text style={styles.modalText}>
-            Date: {date.toLocaleDateString('en-US')}
-          </Text> */}
-          <View style={{ margin:10 }}>
+          <Rating
+            showRating
+            startingValue={rating}
+            imageSize={40}
+            onFinishRating={setRating}
+            style={{ paddingVertical: 10 }}
+          />
+          <Input
+            placeholder='Author'
+            leftIcon={{ type: 'font-awesome', name: 'user-o'}}
+            leftIconContainerStyle={{ paddingRight: 10 }}
+            onChangeText={setAuthor}
+            value={author}
+          />
+          <Input
+            placeholder='Comment'
+            leftIcon={{ type: 'font-awesome', name: 'comment-o'}}
+            leftIconContainerStyle={{ paddingRight: 10 }}
+            onChangeText={setText}
+            value={text}
+          />
+          <View name='submit' style={{ margin: 10 }}>
             <Button
               onPress={() => {
-                setShowModal(!showModal);
+                handleSubmit()
+                resetForm()
+              }}
+              color='#5637DD'
+              title='Submit'
+            />
+          </View>
+          <View name='cancel' style={{ margin: 10 }}>
+            <Button
+              onPress={() => {
+                setShowModal(!showModal)
+                resetForm()
               }}
               color='#808080'
               title='Cancel'
