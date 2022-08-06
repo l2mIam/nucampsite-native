@@ -75,7 +75,7 @@ const CampsiteInfoScreen = ({ route }) => {
               toggleFavorite={() => dispatch(toggleFavorite(campsite.id))}
               onShowModal={() => setShowModal(!showModal)}
             />
-            <Text style={StyleSheet.commentsTitle}>Comments</Text>
+            <Text style={styles.commentsTitle}>Comments</Text>
           </>
         }
       />
@@ -140,13 +140,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#434840',
-    padding: 10,
-    paddingTop: 30
+    borderBottomColor: 'lightgrey',
+    borderRadius: 15,
+    paddingVertical: 15,
+    borderBottomWidth: 2
   },
   commentItem: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    borderBottomColor: 'grey',
+    borderRadius: 15,
+    borderBottomWidth: StyleSheet.hairlineWidth
   },
   modal: {
     justifyContent: 'center',
