@@ -33,18 +33,13 @@ const ReservationScreen = () => {
         const buttons = [
                 {
                     text: 'Cancel',
-                    onPress: () => {
-                        console.log(`cancelled`)
-                        resetForm()
-                    },
+                    onPress: resetForm,
                     style: 'cancel'
                 },
                 {
                     text: 'OK',
-                    onPress: () => {
-                        console.log('Begin search')
-                        resetForm()
-                    }
+                    onPress: resetForm,
+                    style: 'ok'
                 }
             ]
         const options = { cancelable: false }
