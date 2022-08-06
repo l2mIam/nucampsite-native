@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import { Text, ScrollView } from 'react-native'
 import { Card, ListItem } from 'react-native-elements'
+import * as Animatable from 'react-native-animatable'
 import { Avatar } from 'react-native-elements/dist/avatar/Avatar'
 import { useSelector } from 'react-redux'
 import { baseUrl } from '../shared/baseUrl'
@@ -77,15 +77,27 @@ const AboutScreen = () => {
   }
   if (partners.errMess) {
     <ScrollView>
-      <Mission />
-      <CommunityPartnersError partners={partners}/>
+      <Animatable.View
+        animation='fadeInDown'
+        duration={2000}
+        delay={1000}
+      >
+        <Mission />
+        <CommunityPartnersError partners={partners}/>
+      </Animatable.View>
     </ScrollView>
   }
 
     return (
       <ScrollView>
-        <Mission />
-        <CommunityPartners />
+        <Animatable.View
+          animation='fadeInDown'
+          duration={2000}
+          delay={1000}
+        >
+          <Mission />
+          <CommunityPartners />
+        </Animatable.View>
       </ScrollView>
     )
 }
