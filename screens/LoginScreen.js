@@ -6,6 +6,7 @@ import { baseUrl } from '../shared/baseUrl'
 import logo from '../assets/images/logo.png'
 import * as ImagePicker from 'expo-image-picker'
 import * as SecureStore from 'expo-secure-store'
+import * as MediaLibrary from 'expo-media-library';
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator'
 
 const LoginTab = ({ navigation }) => {
@@ -172,6 +173,10 @@ const RegisterTab = () => {
     )
     console.log(processedImage)
     setImageUrl(processedImage.uri)
+    const saveMediaPermissions = await MediaLibrary.requestPermissionsAsync()
+    if (saveMediaPermissions.status === 'granted') {
+      const asset = await MediaLibrary.createAssetAsync(imageUrl)
+    }
   }
   return (
     <ScrollView>
